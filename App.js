@@ -2,6 +2,7 @@ import * as React from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, Text, View, Image } from 'react-native';
 import {Header} from 'react-native-elements';
 import db from './local-db';
+import SoundButton from './components/SoundButton';
 
 export default class App extends React.Component {
   constructor(){
@@ -9,12 +10,11 @@ export default class App extends React.Component {
     this.state = {
       text: '',
       chunks: [],
+      sounds: [],
     }
   }
 
   render(){
-
-   
     return (
       <View style={styles.container}>
         <Header
@@ -32,7 +32,6 @@ export default class App extends React.Component {
           style={styles.image}
           source={{ uri: 'https://www.shareicon.net/data/128x128/2015/08/06/80805_face_512x512.png' }}
         />
-        {/* <Text>{db["the"].phones}</Text> */}
 
         <TextInput
           style={styles.input}
@@ -49,7 +48,8 @@ export default class App extends React.Component {
           style={styles.go}
           onPress={() => {
           this.setState({
-            chunks: db[this.state.text].chunks
+            chunks: db[this.state.text].chunks, 
+            sounds: db[this.state.text].phones
           })
         }}>
             <Text style={styles.goText}> Go </Text>
@@ -57,11 +57,9 @@ export default class App extends React.Component {
 
         <View>
           {
-            this.state.chunks.map((chunk) => {
+            this.state.chunks.map((chunk, index) => {
                 return (
-                  <TouchableOpacity style={styles.displayTextButton}>
-                    <Text style={styles.displayText}> {chunk} </Text>
-                  </TouchableOpacity>
+                  <SoundButton word={this.state.chunks[index]} sound={this.state.sounds[index]}/>
                 )
             })
           }
@@ -95,21 +93,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 30,
     fontWeight: 'bold'
-  },
-  displayText: {
-    textAlign: 'center',
-    fontSize: 30,
-    color: 'white'
-  },
-  displayTextButton: {
-    width: '60%',
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
-    borderRadius: 10,
-    margin: 5,
-    backgroundColor: 'red'
   },
   image: {
     width: 150,
